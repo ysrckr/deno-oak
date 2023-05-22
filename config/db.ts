@@ -1,15 +1,11 @@
-import { Database, PostgresConnector } from "https://deno.land/x/denodb@v1.4.0/mod.ts";
-import { User } from '../models/User.ts';
+import { dso } from 'https://deno.land/x/dso@v1.0.0/mod.ts';
 
-const connection = new PostgresConnector({
-  host: '...',
-  username: 'user',
-  password: 'password',
-  database: 'deno',
+await dso.connect({
+  hostname: '127.0.0.1',
+  port: 3306,
+  username: 'root',
+  password: '',
+  db: 'dbname',
 });
 
-const db = new Database(connection);
-
-db.link([User]);
-
-await db.sync({ drop: true });
+await dso.sync(false);
