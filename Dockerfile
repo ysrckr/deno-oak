@@ -1,8 +1,6 @@
-FROM denoland/deno:1.33.4 as base
+FROM denoland/deno:1.33.4 AS base
 
 WORKDIR /app
-
-USER deno
 
 COPY deps.ts ./
 
@@ -10,12 +8,14 @@ RUN deno cache deps.ts
 
 ADD . .
 
-RUN deno install --allow-net --allow-read --allow-write --allow-env --allow-run --unstable --root /app main.ts
+RUN deno compile -A main.ts -o deno-app
 
-FROM alpine:3.14.2
+FROM denoland/deno:1.33.4 AS release
 
 WORKDIR /app
 
-COPY --chown=deno:deno --from=base /app/bin/main /app/main
+COPY --from=base /app/deno-app ./
 
-CMD ["/app/main"]
+EXPOSE 8000
+
+CMD ["./deno-app"]

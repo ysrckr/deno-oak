@@ -9,7 +9,6 @@ import {
 @Model('users')
 class UserModel extends BaseModel {
 
-  // The ! operator is needed for primary key since it's never null
   @Field({
     type: FieldType.INT,
     primary: true,
